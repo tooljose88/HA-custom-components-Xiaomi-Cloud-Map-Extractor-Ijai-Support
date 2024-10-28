@@ -6,40 +6,38 @@
 [![buycoffee.to][buycoffee_to_shield]][buycoffee_to]
 [![PayPal.Me][paypal_me_shield]][paypal_me]
 [![Revolut.Me][revolut_me_shield]][revolut_me]
-<!-- piotrmachowski_support_badges_end -->
 
+<!-- piotrmachowski_support_badges_end -->
 
 [hacs_shield]: https://img.shields.io/static/v1.svg?label=HACS&message=Default&style=popout&color=green&labelColor=41bdf5&logo=HomeAssistantCommunityStore&logoColor=white
 [hacs]: https://hacs.xyz/docs/default_repositories
-
 [latest_release]: https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/releases/latest
 [releases_shield]: https://img.shields.io/github/release/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor.svg?style=popout
-
 [releases]: https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/releases
 [downloads_total_shield]: https://img.shields.io/github/downloads/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/total
-
 [community_forum_shield]: https://img.shields.io/static/v1.svg?label=%20&message=Forum&style=popout&color=41bdf5&logo=HomeAssistant&logoColor=white
 [community_forum]: https://community.home-assistant.io/t/xiaomi-cloud-vacuum-map-extractor/231292
 
-
+WARNING: This is a beta version for supporting Xiaomi S12 Vacuum. It is not yet fully tested and may have some bugs.
 
 # Xiaomi Cloud Map Extractor
 
 This custom integration provides a way to present a live view of a map for Xiaomi, Roborock, Viomi, Roidmi and Dreame vacuums.
 ([Supported devices](#supported-devices))
 
-<img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_no_rooms.png" width=48%>  <img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_rooms.png" width=48%>
+<img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_no_rooms.png" width=48%> <img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_rooms.png" width=48%>
 
 ## Installation
 
 ### Using [HACS](https://hacs.xyz/) (recommended)
 
 This integration can be installed using HACS.
-To do it search for `Xiaomi Cloud Map Extractor` in *Integrations* section.
+To do it search for `Xiaomi Cloud Map Extractor` in _Integrations_ section.
 
 ### Manual
 
-To install this integration manually you have to download [*xiaomi_cloud_map_extractor.zip*](https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/releases/latest/download/xiaomi_cloud_map_extractor.zip) and extract its contents to `config/custom_components/xiaomi_cloud_map_extractor` directory:
+To install this integration manually you have to download [_xiaomi_cloud_map_extractor.zip_](https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/releases/latest/download/xiaomi_cloud_map_extractor.zip) and extract its contents to `config/custom_components/xiaomi_cloud_map_extractor` directory:
+
 ```bash
 mkdir -p custom_components/xiaomi_cloud_map_extractor
 cd custom_components/xiaomi_cloud_map_extractor
@@ -84,16 +82,15 @@ camera:
     token: !secret xiaomi_vacuum_token
     username: !secret xiaomi_cloud_username
     password: !secret xiaomi_cloud_password
-    draw: ['all']
+    draw: ["all"]
     attributes:
       - calibration_points
 ```
 
-
 #### Full
 
 | This configuration's purpose is to show all available options, do not use it unless you know what you are doing. |
-| --- |
+| ---------------------------------------------------------------------------------------------------------------- |
 
 <details>
 <summary>I know what I'm doing and I will not recklessly copy this config to my setup</summary>
@@ -125,7 +122,7 @@ camera:
       color_zones: [0xAD, 0xD8, 0xFF, 0x8F]
       color_zones_outline: [0xAD, 0xD8, 0xFF]
       color_virtual_walls: [255, 0, 0]
-      color_carpets: [0xA9, 0xF7, 0xA9 ]
+      color_carpets: [0xA9, 0xF7, 0xA9]
       color_no_carpet_zones: [255, 33, 55, 0x5F]
       color_no_carpet_zones_outline: [255, 0, 0]
       color_new_discovered_area: [64, 64, 64]
@@ -237,176 +234,182 @@ camera:
     store_map_path: "/tmp"
     force_api: xiaomi
 ```
+
 </details>
 
 ### Available configuration parameters
 
-| Key | Type | Required | Value | Description |
-|---|---|---|---|---|
-| `platform` | string | true | `xiaomi_cloud_map_extractor` | Name of a platform |
-| `host` | string | true | `192.168.0.123` | IP address of a vacuum |
-| `token` | string | true | `ghjhca3ykg8o2zyyj7xb5adamhgsypel` | Token of a vacuum |
-| `username` | string | true | `xiaomi.account@gmail.com` | Username (email or user ID) used to connect to Xiaomi cloud (the account used in the Xiaomi Home app) |
-| `password` | string | true | `aVerySecretPassword` | Password used to connect to Xiaomi cloud (the account used in the Xiaomi Home app) |
-| `name` | string | false |   | Desired name of camera entity |
-| `country` | string | false | One of: `cn`, `de`, `us`, `ru`, `tw`, `sg`, `in`, `i2` | Server used in Xiaomi cloud. Leave empty if you are not sure. |
-| `colors` | map | false |  | Colors configuration ([see below](#colors-configuration)) |
-| `room_colors` | map | false |  | Room colors configuration ([see below](#room-colors-configuration)) |
-| `draw` | list | false |  | List of elements to draw on a map ([see below](#draw-configuration)) |
-| `texts` | list | false |  | List of texts to draw on a map ([see below](#texts-configuration)) |
-| `map_transformation` | map | false |  | Parameters of map transformation ([see below](#map-transformation-configuration)) |
-| `sizes` | map | false |  | Sizes of map's elements ([see below](#sizes-configuration)) |
-| `attributes` | list | false |  | List of desired entity attributes ([see below](#attributes-configuration)) |
-| `scan_interval` | interval | false | default: `5` seconds | Interval between map updates ([documentation](https://www.home-assistant.io/docs/configuration/platform_options/#scan-interval)) |
-| `auto_update` | boolean | false | default: `true` | Activation/deactivation of automatic map updates. ([see below](#updates)) |
-| `store_map_raw` | boolean | false | default: `false` | Enables storing raw map data in `store_map_path` directory ([more info](#retrieving-map)). Xiaomi map can be opened with [RoboMapViewer](https://github.com/marcelrv/XiaomiRobotVacuumProtocol/tree/master/RRMapFile). |
-| `store_map_image` | boolean | false | default: `false` | Enables storing map image in `store_map_path` path with name `map_image_<device_model>.png` |
-| `store_map_path` | string | false | default: `/tmp` | Storing map data directory |
-| `force_api` | string | false | One of: `xiaomi`, `viomi`, `roidmi`, `dreame` | Forces usage of specific API. |
+| Key                  | Type     | Required | Value                                                  | Description                                                                                                                                                                                                            |
+| -------------------- | -------- | -------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `platform`           | string   | true     | `xiaomi_cloud_map_extractor`                           | Name of a platform                                                                                                                                                                                                     |
+| `host`               | string   | true     | `192.168.0.123`                                        | IP address of a vacuum                                                                                                                                                                                                 |
+| `token`              | string   | true     | `ghjhca3ykg8o2zyyj7xb5adamhgsypel`                     | Token of a vacuum                                                                                                                                                                                                      |
+| `username`           | string   | true     | `xiaomi.account@gmail.com`                             | Username (email or user ID) used to connect to Xiaomi cloud (the account used in the Xiaomi Home app)                                                                                                                  |
+| `password`           | string   | true     | `aVerySecretPassword`                                  | Password used to connect to Xiaomi cloud (the account used in the Xiaomi Home app)                                                                                                                                     |
+| `name`               | string   | false    |                                                        | Desired name of camera entity                                                                                                                                                                                          |
+| `country`            | string   | false    | One of: `cn`, `de`, `us`, `ru`, `tw`, `sg`, `in`, `i2` | Server used in Xiaomi cloud. Leave empty if you are not sure.                                                                                                                                                          |
+| `colors`             | map      | false    |                                                        | Colors configuration ([see below](#colors-configuration))                                                                                                                                                              |
+| `room_colors`        | map      | false    |                                                        | Room colors configuration ([see below](#room-colors-configuration))                                                                                                                                                    |
+| `draw`               | list     | false    |                                                        | List of elements to draw on a map ([see below](#draw-configuration))                                                                                                                                                   |
+| `texts`              | list     | false    |                                                        | List of texts to draw on a map ([see below](#texts-configuration))                                                                                                                                                     |
+| `map_transformation` | map      | false    |                                                        | Parameters of map transformation ([see below](#map-transformation-configuration))                                                                                                                                      |
+| `sizes`              | map      | false    |                                                        | Sizes of map's elements ([see below](#sizes-configuration))                                                                                                                                                            |
+| `attributes`         | list     | false    |                                                        | List of desired entity attributes ([see below](#attributes-configuration))                                                                                                                                             |
+| `scan_interval`      | interval | false    | default: `5` seconds                                   | Interval between map updates ([documentation](https://www.home-assistant.io/docs/configuration/platform_options/#scan-interval))                                                                                       |
+| `auto_update`        | boolean  | false    | default: `true`                                        | Activation/deactivation of automatic map updates. ([see below](#updates))                                                                                                                                              |
+| `store_map_raw`      | boolean  | false    | default: `false`                                       | Enables storing raw map data in `store_map_path` directory ([more info](#retrieving-map)). Xiaomi map can be opened with [RoboMapViewer](https://github.com/marcelrv/XiaomiRobotVacuumProtocol/tree/master/RRMapFile). |
+| `store_map_image`    | boolean  | false    | default: `false`                                       | Enables storing map image in `store_map_path` path with name `map_image_<device_model>.png`                                                                                                                            |
+| `store_map_path`     | string   | false    | default: `/tmp`                                        | Storing map data directory                                                                                                                                                                                             |
+| `force_api`          | string   | false    | One of: `xiaomi`, `viomi`, `roidmi`, `dreame`          | Forces usage of specific API.                                                                                                                                                                                          |
 
 #### Colors configuration
 
-  Each color is represented by a list of 3 or 4 parameters: `[red, green, blue]` or `[red, green, blue, alpha]`.
-  Each parameter is a number from a range 0-255 and can be also provided as a HEX value: [0x12, 0xAF, 0xC5] matches #12AFC5.
+Each color is represented by a list of 3 or 4 parameters: `[red, green, blue]` or `[red, green, blue, alpha]`.
+Each parameter is a number from a range 0-255 and can be also provided as a HEX value: [0x12, 0xAF, 0xC5] matches #12AFC5.
 
   <img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_no_rooms_custom_colors.png" width=50%>
 
-  | Color name | Description |
-  | --- | --- |
-  | `color_carpets` | Carpets fill, in checkboard pattern |
-  | `color_charger` | Charger fill |
-  | `color_charger_outline` | Charger outline |
-  | `color_cleaned_area` | Fill of area that already has been cleaned |
-  | `color_goto_path` | Path for goto mode |
-  | `color_grey_wall` | Obstacles (e.g. chairs, table legs) |
-  | `color_ignored_obstacle_with_photo` | Ignored obstacle with photo mark on a map |
-  | `color_ignored_obstacle` | Ignored obstacle mark on a map |
-  | `color_map_inside` | Map inside (for software without rooms support) |
-  | `color_map_outside` | Map outside |
-  | `color_map_wall_v2` | Walls (for software with rooms support) |
-  | `color_map_wall` | Walls (for software without rooms support) |
-  | `color_new_discovered_area` | Newly discovered areas |
-  | `color_no_carpet_zones_outline` | Outline of no-carpet zones |
-  | `color_no_carpet_zones` | Fill of no-carpet zones |
-  | `color_no_go_zones_outline` | Outline of no-go zones |
-  | `color_no_go_zones` | Fill of no-go zones |
-  | `color_no_mop_zones_outline` | Outline of no-mopping zones |
-  | `color_no_mop_zones` | Fill of no-mopping zones |
-  | `color_obstacle_with_photo` | Obstacle with photo mark on a map |
-  | `color_obstacle` | Obstacle mark on a map |
-  | `color_path` | Path of a vacuum |
-  | `color_mop_path` | Mopped path of a vacuum (for vacuums that support mopping) |
-  | `color_predicted_path` | Predicted path to a point in goto mode |
-  | `color_robo` | Vacuum fill |
-  | `color_robo_outline` | Vacuum outline |
-  | `color_room_names` | Room names (if available) |
-  | `color_scan` | Areas not assigned to any room (for software with rooms support) |
-  | `color_unknown` | Other areas |
-  | `color_virtual_walls` | Virtual walls |
-  | `color_zones_outline` | Outline of areas selected for zoned cleaning |
-  | `color_zones` | Fill of areas selected for zoned cleaning |
+| Color name                          | Description                                                      |
+| ----------------------------------- | ---------------------------------------------------------------- |
+| `color_carpets`                     | Carpets fill, in checkboard pattern                              |
+| `color_charger`                     | Charger fill                                                     |
+| `color_charger_outline`             | Charger outline                                                  |
+| `color_cleaned_area`                | Fill of area that already has been cleaned                       |
+| `color_goto_path`                   | Path for goto mode                                               |
+| `color_grey_wall`                   | Obstacles (e.g. chairs, table legs)                              |
+| `color_ignored_obstacle_with_photo` | Ignored obstacle with photo mark on a map                        |
+| `color_ignored_obstacle`            | Ignored obstacle mark on a map                                   |
+| `color_map_inside`                  | Map inside (for software without rooms support)                  |
+| `color_map_outside`                 | Map outside                                                      |
+| `color_map_wall_v2`                 | Walls (for software with rooms support)                          |
+| `color_map_wall`                    | Walls (for software without rooms support)                       |
+| `color_new_discovered_area`         | Newly discovered areas                                           |
+| `color_no_carpet_zones_outline`     | Outline of no-carpet zones                                       |
+| `color_no_carpet_zones`             | Fill of no-carpet zones                                          |
+| `color_no_go_zones_outline`         | Outline of no-go zones                                           |
+| `color_no_go_zones`                 | Fill of no-go zones                                              |
+| `color_no_mop_zones_outline`        | Outline of no-mopping zones                                      |
+| `color_no_mop_zones`                | Fill of no-mopping zones                                         |
+| `color_obstacle_with_photo`         | Obstacle with photo mark on a map                                |
+| `color_obstacle`                    | Obstacle mark on a map                                           |
+| `color_path`                        | Path of a vacuum                                                 |
+| `color_mop_path`                    | Mopped path of a vacuum (for vacuums that support mopping)       |
+| `color_predicted_path`              | Predicted path to a point in goto mode                           |
+| `color_robo`                        | Vacuum fill                                                      |
+| `color_robo_outline`                | Vacuum outline                                                   |
+| `color_room_names`                  | Room names (if available)                                        |
+| `color_scan`                        | Areas not assigned to any room (for software with rooms support) |
+| `color_unknown`                     | Other areas                                                      |
+| `color_virtual_walls`               | Virtual walls                                                    |
+| `color_zones_outline`               | Outline of areas selected for zoned cleaning                     |
+| `color_zones`                       | Fill of areas selected for zoned cleaning                        |
 
 #### Room colors configuration
 
-  This section contains mapping between room numbers and colors.
-  Each color is represented by a list of 3 or 4 parameters: `[red, green, blue]` or `[red, green, blue, alpha]`.
-  Each parameter is a number from a range 0-255 and can be also provided as a HEX value: [0x12, 0xAF, 0xC5] matches #12AFC5.
+This section contains mapping between room numbers and colors.
+Each color is represented by a list of 3 or 4 parameters: `[red, green, blue]` or `[red, green, blue, alpha]`.
+Each parameter is a number from a range 0-255 and can be also provided as a HEX value: [0x12, 0xAF, 0xC5] matches #12AFC5.
 
 #### Draw configuration
 
-  A list of features to be drawn on a map. If all features should be drawn it can be replaced with:
-  ```yaml
-    draw: ["all"]
-  ```
-  Available values:
-  - `charger`
-  - `cleaned_area`
-  - `goto_path`
-  - `ignored_obstacles_with_photo`
-  - `ignored_obstacles`
-  - `mop_path`
-  - `no_carpet_zones`
-  - `no_go_zones`
-  - `no_mopping_zones`
-  - `obstacles_with_photo`
-  - `obstacles`
-  - `path`
-  - `predicted_path`
-  - `room_names`
-  - `vacuum_position`
-  - `virtual_walls`
-  - `zones`
+A list of features to be drawn on a map. If all features should be drawn it can be replaced with:
+
+```yaml
+draw: ["all"]
+```
+
+Available values:
+
+- `charger`
+- `cleaned_area`
+- `goto_path`
+- `ignored_obstacles_with_photo`
+- `ignored_obstacles`
+- `mop_path`
+- `no_carpet_zones`
+- `no_go_zones`
+- `no_mopping_zones`
+- `obstacles_with_photo`
+- `obstacles`
+- `path`
+- `predicted_path`
+- `room_names`
+- `vacuum_position`
+- `virtual_walls`
+- `zones`
 
 #### Texts configuration
 
 Each list entry must obey a following schema.
 You can get a list of available fonts by executing this command:
+
 ```bash
 fc-list | grep ttf | sed "s/.*\///"| sed "s/ttf.*/ttf/"
 ```
 
-  | Parameter | Type | Required | Default value | Description |
-  |---|---|---|---|---|
-  | `text` | string | true |   | Text to draw on a map |
-  | `x` | float | true |   | X position of a text (in percents) |
-  | `y` | float | true |   | Y position of a text (in percents) |
-  | `color` | list | false | black | Desired color of a text, formatted like [here](#colors-configuration) |
-  | `font` | string | false |   | Name of a font to use |
-  | `font_size` | int | false |   | Size of a font |
+| Parameter   | Type   | Required | Default value | Description                                                           |
+| ----------- | ------ | -------- | ------------- | --------------------------------------------------------------------- |
+| `text`      | string | true     |               | Text to draw on a map                                                 |
+| `x`         | float  | true     |               | X position of a text (in percents)                                    |
+| `y`         | float  | true     |               | Y position of a text (in percents)                                    |
+| `color`     | list   | false    | black         | Desired color of a text, formatted like [here](#colors-configuration) |
+| `font`      | string | false    |               | Name of a font to use                                                 |
+| `font_size` | int    | false    |               | Size of a font                                                        |
 
 #### Map transformation configuration
 
-  | Parameter | Type | Required | Default value | Description |
-  |---|---|---|---|---|
-  | `scale` | float | false | 1 | Scaling factor for a map. |
-  | `rotate` | integer | false | 0 | Angle of map rotation. Available values: [`0`, `90`, `180`, `270`] |
-  | `trim` | map | false | 0 | Map trimming configuration. Each trimming direction is in percents: value `25` means trimming of quarter of image size in a given dimension. Available keys: [`left`, `right`, `top`, `bottom`] |
+| Parameter | Type    | Required | Default value | Description                                                                                                                                                                                     |
+| --------- | ------- | -------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scale`   | float   | false    | 1             | Scaling factor for a map.                                                                                                                                                                       |
+| `rotate`  | integer | false    | 0             | Angle of map rotation. Available values: [`0`, `90`, `180`, `270`]                                                                                                                              |
+| `trim`    | map     | false    | 0             | Map trimming configuration. Each trimming direction is in percents: value `25` means trimming of quarter of image size in a given dimension. Available keys: [`left`, `right`, `top`, `bottom`] |
 
 #### Sizes configuration
 
-  | Parameter | Type | Required | Default value | Description |
-  |---|---|---|---|---|
-  | `charger_radius` | float | false | 6 | Radius of a charger circle. |
-  | `vacuum_radius` | float | false | 6 | Radius of a vacuum semi-circle. |
-  | `obstacle_radius` | float | false | 3 | Radius of an obstacle circle. |
-  | `ignored_obstacle_radius` | float | false | 3 | Radius of an ignored obstacle circle circle. |
-  | `obstacle_with_photo_radius` | float | false | 3 | Radius of an obstacle with photo circle. |
-  | `ignored_obstacle_with_photo_radius` | float | false | 3 | Radius of an ignored obstacle with photo circle. |
-  | `path_width` | float | false | 1 | Width of path line. |
-  | `mop_path_width` | float | false | equal to vacuum radius | Width of mop path line. |
+| Parameter                            | Type  | Required | Default value          | Description                                      |
+| ------------------------------------ | ----- | -------- | ---------------------- | ------------------------------------------------ |
+| `charger_radius`                     | float | false    | 6                      | Radius of a charger circle.                      |
+| `vacuum_radius`                      | float | false    | 6                      | Radius of a vacuum semi-circle.                  |
+| `obstacle_radius`                    | float | false    | 3                      | Radius of an obstacle circle.                    |
+| `ignored_obstacle_radius`            | float | false    | 3                      | Radius of an ignored obstacle circle circle.     |
+| `obstacle_with_photo_radius`         | float | false    | 3                      | Radius of an obstacle with photo circle.         |
+| `ignored_obstacle_with_photo_radius` | float | false    | 3                      | Radius of an ignored obstacle with photo circle. |
+| `path_width`                         | float | false    | 1                      | Width of path line.                              |
+| `mop_path_width`                     | float | false    | equal to vacuum radius | Width of mop path line.                          |
 
 #### Attributes configuration
 
-  A list of attributes that an entity should have.
-  Available values:
-  - `calibration_points` - Calculated calibration points for [Lovelace Xiaomi Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card).
-     <img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_card.gif" width=50%>
-  - `carpet_map`
-  - `charger`
-  - `cleaned_rooms`
-  - `country`
-  - `goto_path`
-  - `goto_predicted_path`
-  - `goto`
-  - `ignored_obstacles_with_photo`
-  - `ignored_obstacles`
-  - `image`
-  - `is_empty`
-  - `map_name`
-  - `mop_path`
-  - `no_carpet_areas`
-  - `no_go_areas`
-  - `no_mopping_areas`
-  - `obstacles_with_photo`
-  - `obstacles`
-  - `path`
-  - `room_numbers`
-  - `rooms`
-  - `vacuum_position`
-  - `vacuum_room_name`
-  - `vacuum_room`
-  - `walls`
-  - `zones`
+A list of attributes that an entity should have.
+Available values:
+
+- `calibration_points` - Calculated calibration points for [Lovelace Xiaomi Vacuum Map card](https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card).
+  <img src="https://raw.githubusercontent.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor/master/images/map_card.gif" width=50%>
+- `carpet_map`
+- `charger`
+- `cleaned_rooms`
+- `country`
+- `goto_path`
+- `goto_predicted_path`
+- `goto`
+- `ignored_obstacles_with_photo`
+- `ignored_obstacles`
+- `image`
+- `is_empty`
+- `map_name`
+- `mop_path`
+- `no_carpet_areas`
+- `no_go_areas`
+- `no_mopping_areas`
+- `obstacles_with_photo`
+- `obstacles`
+- `path`
+- `room_numbers`
+- `rooms`
+- `vacuum_position`
+- `vacuum_room_name`
+- `vacuum_room`
+- `walls`
+- `zones`
 
 ## Updates
 
@@ -426,45 +429,47 @@ If you want to disable map updates when a vacuum is not running you can use [thi
 ## Supported devices
 
 This integration was tested on following vacuums:
- - Xiaomi map format:
-   - `rockrobo.vacuum.v1` (Xiaomi Vacuum Gen 1, Mi Robot Vacuum, SDJQR01RR, SDJQR02RR)
-   - `roborock.vacuum.m1s` (Xiaomi Mi Robot 1S)
-   - `roborock.vacuum.s4` (Roborock S4)
-   - `roborock.vacuum.s5` (Roborock S5)
-   - `roborock.vacuum.s5e` (Roborock S5 Max)
-   - `rockrobo.vacuum.s6` (Roborock S6)
-   - `roborock.vacuum.a08` (Roborock S6 Pure)
-   - `roborock.vacuum.a10` (Roborock S6 MaxV)
-   - `roborock.vacuum.a15` (Roborock S7)
-   - `roborock.vacuum.a19` (Roborocka S4 Max)
-   - `roborock.vacuum.a27` (Roborock S7 MaxV)
- - Viomi map format:
-   - `viomi.vacuum.v6` (Viomi Vacuum V2 Pro, Xiaomi Mijia STYJ02YM, Mi Robot Vacuum Mop Pro)
-   - `viomi.vacuum.v7` (Mi Robot Vacuum-Mop Pro)
-   - `viomi.vacuum.v8` (Mi Robot Vacuum-Mop Pro)
-   - `viomi.vacuum.v13` (Viomi V3)
- - Roidmi map format:
-   - `roidmi.vacuum.v60` (Roidmi EVE Plus)
-   - `viomi.vacuum.v18` (Viomi S9)
-   - `viomi.vacuum.v38` (Viomi V5 Pro)
-   - `zhimi.vacuum.xa1` (Lydsto R1)
-   - `chuangmi.vacuum.hmi707` (IMILAB V1 Vacuum)
- - Dreame map format:
-   - `dreame.vacuum.mc1808` (Xiaomi Mi Mop/Xiaomi Mijia 1C)
-   - `dreame.vacuum.p2008` (Dreame F9)
-   - `dreame.vacuum.p2009` (Dreame D9)
-   - `dreame.vacuum.p2028` (Dreame Z10 Pro)
-   - `dreame.vacuum.p2029` (Dreame L10 Pro)
-   - `dreame.vacuum.p2036` (Trouver LDS Cleaner)
-   - `dreame.vacuum.p2041o` (Xiaomi Mop 2 Pro+)
-   - `dreame.vacuum.p2140` (Mijia Robot Vacuum-Mop 2C)
-   - `dreame.vacuum.p2157` (MOVA L600)
-   - `dreame.vacuum.p2259` (Dreame D9 Max)
+
+- Xiaomi map format:
+  - `rockrobo.vacuum.v1` (Xiaomi Vacuum Gen 1, Mi Robot Vacuum, SDJQR01RR, SDJQR02RR)
+  - `roborock.vacuum.m1s` (Xiaomi Mi Robot 1S)
+  - `roborock.vacuum.s4` (Roborock S4)
+  - `roborock.vacuum.s5` (Roborock S5)
+  - `roborock.vacuum.s5e` (Roborock S5 Max)
+  - `rockrobo.vacuum.s6` (Roborock S6)
+  - `roborock.vacuum.a08` (Roborock S6 Pure)
+  - `roborock.vacuum.a10` (Roborock S6 MaxV)
+  - `roborock.vacuum.a15` (Roborock S7)
+  - `roborock.vacuum.a19` (Roborocka S4 Max)
+  - `roborock.vacuum.a27` (Roborock S7 MaxV)
+- Viomi map format:
+  - `viomi.vacuum.v6` (Viomi Vacuum V2 Pro, Xiaomi Mijia STYJ02YM, Mi Robot Vacuum Mop Pro)
+  - `viomi.vacuum.v7` (Mi Robot Vacuum-Mop Pro)
+  - `viomi.vacuum.v8` (Mi Robot Vacuum-Mop Pro)
+  - `viomi.vacuum.v13` (Viomi V3)
+- Roidmi map format:
+  - `roidmi.vacuum.v60` (Roidmi EVE Plus)
+  - `viomi.vacuum.v18` (Viomi S9)
+  - `viomi.vacuum.v38` (Viomi V5 Pro)
+  - `zhimi.vacuum.xa1` (Lydsto R1)
+  - `chuangmi.vacuum.hmi707` (IMILAB V1 Vacuum)
+- Dreame map format:
+  - `dreame.vacuum.mc1808` (Xiaomi Mi Mop/Xiaomi Mijia 1C)
+  - `dreame.vacuum.p2008` (Dreame F9)
+  - `dreame.vacuum.p2009` (Dreame D9)
+  - `dreame.vacuum.p2028` (Dreame Z10 Pro)
+  - `dreame.vacuum.p2029` (Dreame L10 Pro)
+  - `dreame.vacuum.p2036` (Trouver LDS Cleaner)
+  - `dreame.vacuum.p2041o` (Xiaomi Mop 2 Pro+)
+  - `dreame.vacuum.p2140` (Mijia Robot Vacuum-Mop 2C)
+  - `dreame.vacuum.p2157` (MOVA L600)
+  - `dreame.vacuum.p2259` (Dreame D9 Max)
 
 ## Retrieving map
 
 When `store_map_raw: true` is added to your config this integration will store a raw map file in `/tmp` directory.
 If you don't use Core installation ([installation types](https://www.home-assistant.io/installation/#compare-installation-methods)) you can retrieve this file in the following way:
+
 - In [SSH & Terminal add-on](https://github.com/hassio-addons/addon-ssh) enable protected access
 - Open terminal and use the following command to copy file:
   ```
@@ -486,12 +491,11 @@ logger:
 ## Special thanks
 
 This integration wouldn't exist without following projects:
- - [openHAB miIO add-on](https://github.com/openhab/openhab-addons/tree/main/bundles/org.openhab.binding.miio/src/main/java/org/openhab/binding/miio) by [@marcelrv](https://github.com/marcelrv)
- - [valeCLOUDo](https://github.com/Xento/valeCLOUDo) by [@Xento](https://github.com/Xento)
- - [Xiaomi Robot Vacuum Protocol](https://github.com/marcelrv/XiaomiRobotVacuumProtocol) by [@marcelrv](https://github.com/marcelrv)
- - [Valetudo](https://github.com/Hypfer/Valetudo) by [@Hypfer](https://github.com/Hypfer)
 
-
+- [openHAB miIO add-on](https://github.com/openhab/openhab-addons/tree/main/bundles/org.openhab.binding.miio/src/main/java/org/openhab/binding/miio) by [@marcelrv](https://github.com/marcelrv)
+- [valeCLOUDo](https://github.com/Xento/valeCLOUDo) by [@Xento](https://github.com/Xento)
+- [Xiaomi Robot Vacuum Protocol](https://github.com/marcelrv/XiaomiRobotVacuumProtocol) by [@marcelrv](https://github.com/marcelrv)
+- [Valetudo](https://github.com/Hypfer/Valetudo) by [@Hypfer](https://github.com/Hypfer)
 
 <!-- piotrmachowski_support_links_start -->
 
@@ -558,24 +562,15 @@ If you want to support my work with a donation you can use one of the following 
   </tr>
 </table>
 
-
 [ko_fi_shield]: https://img.shields.io/static/v1.svg?label=%20&message=Ko-Fi&color=F16061&logo=ko-fi&logoColor=white
-
 [ko_fi]: https://ko-fi.com/piotrmachowski
-
 [buycoffee_to_shield]: https://shields.io/badge/buycoffee.to-white?style=flat&labelColor=white&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABhmlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw1AUhU9TpaIVh1YQcchQnayIijhKFYtgobQVWnUweemP0KQhSXFxFFwLDv4sVh1cnHV1cBUEwR8QVxcnRRcp8b6k0CLGC4/3cd49h/fuA4R6malmxzigapaRisfEbG5FDLzChxB6MIZ+iZl6Ir2QgWd93VM31V2UZ3n3/Vm9St5kgE8knmW6YRGvE09vWjrnfeIwK0kK8TnxqEEXJH7kuuzyG+eiwwLPDBuZ1BxxmFgstrHcxqxkqMRTxBFF1ShfyLqscN7irJarrHlP/sJgXltOc53WEOJYRAJJiJBRxQbKsBClXSPFRIrOYx7+QcefJJdMrg0wcsyjAhWS4wf/g9+zNQuTE25SMAZ0vtj2xzAQ2AUaNdv+PrbtxgngfwautJa/UgdmPkmvtbTIEdC3DVxctzR5D7jcAQaedMmQHMlPSygUgPcz+qYcELoFulfduTXPcfoAZGhWSzfAwSEwUqTsNY93d7XP7d+e5vx+AIahcq//o+yoAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5wETCy4vFNqLzwAAAVpJREFUOMvd0rFLVXEYxvHPOedKJnKJhrDLuUFREULE7YDCMYj+AydpsCWiaKu29hZxiP4Al4aWwC1EdFI4Q3hqEmkIBI8ZChWXKNLLvS0/Qcza84V3enm/7/s878t/HxGkeTaIGziP+EB918nawu7Dq1d0e1+2J2bepnk2jFEUVVF+qKV51o9neBCaugfge70keoxxUbSWjrQ+4SUyzKZ5NlnDZdzGG7w4DIh+dtZEFntDA98l8S0MYwctNGrYz9WqKJePFLq80g5Sr+EHlnATp+NA+4qLaZ7FfzMrzbMBjGEdq8GrJMZnvAvFC/8wfAwjWMQ8XmMzaW9sdevNRgd3MFhvNpbaG1u/Dk2/hOc4gadVUa7Um425qii/7Z+xH9O4jwW8Cqv24Tru4hyeVEU588cfBMgpPMI9nMFe0BkFzVOYrYqycyQgQJLwTC2cDZCPeF8V5Y7jGb8BUpRicy7OU5MAAAAASUVORK5CYII=
-
 [buycoffee_to]: https://buycoffee.to/piotrmachowski
-
 [buy_me_a_coffee_shield]: https://img.shields.io/static/v1.svg?label=%20&message=Buy%20me%20a%20coffee&color=6f4e37&logo=buy%20me%20a%20coffee&logoColor=white
-
 [buy_me_a_coffee]: https://www.buymeacoffee.com/PiotrMachowski
-
 [paypal_me_shield]: https://img.shields.io/static/v1.svg?label=%20&message=PayPal.Me&logo=paypal
-
 [paypal_me]: https://paypal.me/PiMachowski
-
 [revolut_me_shield]: https://img.shields.io/static/v1.svg?label=%20&message=Revolut&logo=revolut
-
 [revolut_me]: https://revolut.me/314ma
+
 <!-- piotrmachowski_support_links_end -->
