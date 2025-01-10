@@ -2,3 +2,15 @@
 reload:
   name: Reload
   description: Reload all entities of Xiaomi Cloud Map Extractor platform
+
+rooms_cleaning:
+  name: Rooms Cleaning
+  description: "Clean one or more rooms"
+  fields:
+    rooms_id:
+      description: "Room id splitted by comma"
+      example: "14 or 14,11" 
+    entity_id:
+      description: "La entidad de la aspiradora Xiaomi"
+      example: "vacuum.mi_aspiradora"
+      required: true
