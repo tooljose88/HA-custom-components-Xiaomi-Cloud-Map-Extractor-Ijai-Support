@@ -15,8 +15,11 @@ except ImportError:
     from miio import Vacuum as RoborockVacuum, DeviceException
 import PIL.Image as Image
 import voluptuous as vol
-from homeassistant.components.camera import Camera, ENTITY_ID_FORMAT, PLATFORM_SCHEMA, SUPPORT_ON_OFF
-from homeassistant.const import CONF_HOST, CONF_NAME, CONF_PASSWORD, CONF_TOKEN, CONF_USERNAME
+from homeassistant.components.camera import Camera, ENTITY_ID_FORMAT, PLATFORM_SCHEMA
+from homeassistant.components.camera import Camera, CameraEntityFeature, ENTITY_ID_FORMAT, PLATFORM_SCHEMA
+from homeassistant.components import vacuum
+
+from homeassistant.const import CONF_ENTITY_ID, CONF_HOST, CONF_NAME, CONF_PASSWORD, CONF_TOKEN, CONF_USERNAME
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.entity import generate_entity_id
 from homeassistant.helpers.reload import async_setup_reload_service
@@ -29,6 +32,7 @@ from custom_components.xiaomi_cloud_map_extractor.roidmi.vacuum import RoidmiVac
 from custom_components.xiaomi_cloud_map_extractor.unsupported.vacuum import UnsupportedVacuum
 from custom_components.xiaomi_cloud_map_extractor.viomi.vacuum import ViomiVacuum
 from custom_components.xiaomi_cloud_map_extractor.xiaomi.vacuum import XiaomiVacuum
+from custom_components.xiaomi_cloud_map_extractor.ijai.vacuum import IjaiVacuum
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -119,9 +123,44 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_FORCE_API, default=None): vol.Or(vol.In(CONF_AVAILABLE_APIS), vol.Equal(None))
     })
 
+ROOMS_CLEANING_SCHEMA = vol.Schema({
+    vol.Required(CONF_ENTITY_ID): cv.entity_domain(vacuum.DOMAIN),
+    vol.Required("rooms_id"): cv.string,
+})
+
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     await async_setup_reload_service(hass, DOMAIN, PLATFORMS)
+
+    async def handle_rooms_cleaning(call):
+        rooms_id = call.data.get("rooms_id")
+        entity_id = call.data.get("entity_id")
+
+        if not entity_id:
+            _LOGGER.error("No entity_id was provided to start the cleaning.")
+            return
+
+        siid = 7
+        aiid = 3
+
+        params = []
+        if rooms_id:
+            params.append(str(rooms_id))
+            params.append(0)
+            params.append(1)
+
+        await hass.services.async_call(
+            "xiaomi_miot",
+            "call_action",
+            {
+                "entity_id": entity_id,
+                "siid": siid,          
+                "aiid": aiid,          
+                "params": params,      
+            }
+        )
+    hass.services.async_register(DOMAIN, 'rooms_cleaning', handle_rooms_cleaning, schema = ROOMS_CLEANING_SCHEMA)   
+
 
     host = config[CONF_HOST]
     token = config[CONF_TOKEN]
@@ -163,6 +202,8 @@ class VacuumCamera(Camera):
         self._connector = XiaomiCloudConnector(username, password)
         self._status = CameraStatus.INITIALIZING
         self._device = None
+        self._host = host
+        self._token = token
         self._name = name
         self._should_poll = should_poll
         self._image_config = image_config
@@ -206,7 +247,7 @@ class VacuumCamera(Camera):
 
     @property
     def supported_features(self) -> int:
-        return SUPPORT_ON_OFF
+        return CameraEntityFeature.ON_OFF
 
     @property
     def extra_state_attributes(self) -> Dict[str, Any]:
@@ -299,11 +340,11 @@ class VacuumCamera(Camera):
 
     def _handle_device(self):
         _LOGGER.debug("Retrieving device info, country: %s", self._country)
-        country, user_id, device_id, model = self._connector.get_device_details(self._vacuum.token, self._country)
+        country, user_id, device_id, model, mac = self._connector.get_device_details(self._vacuum.token, self._country)
         if model is not None:
             self._country = country
             _LOGGER.debug("Retrieved device model: %s", model)
-            self._device = self._create_device(user_id, device_id, model)
+            self._device = self._create_device(user_id, device_id, model, mac)
             _LOGGER.debug("Created device, used api: %s", self._used_api)
         else:
             _LOGGER.error("Failed to retrieve model")
@@ -363,7 +404,7 @@ class VacuumCamera(Camera):
         self._map_data = map_data
         self._store_image()
 
-    def _create_device(self, user_id: str, device_id: str, model: str) -> XiaomiCloudVacuum:
+    def _create_device(self, user_id: str, device_id: str, model: str, mac: str) -> XiaomiCloudVacuum:
         self._used_api = self._detect_api(model)
         if self._used_api == CONF_AVAILABLE_API_XIAOMI:
             return XiaomiVacuum(self._connector, self._country, user_id, device_id, model)
@@ -373,6 +414,8 @@ class VacuumCamera(Camera):
             return RoidmiVacuum(self._connector, self._country, user_id, device_id, model)
         if self._used_api == CONF_AVAILABLE_API_DREAME:
             return DreameVacuum(self._connector, self._country, user_id, device_id, model)
+        if self._used_api == CONF_AVAILABLE_API_IJAI:
+            return IjaiVacuum(self._connector, self._country, user_id, device_id, model, self._token, self._host, mac)
         return UnsupportedVacuum(self._connector, self._country, user_id, device_id, model)
 
     def _detect_api(self, model: str) -> Optional[str]:
