@@ -215,7 +215,7 @@ class XiaomiCloudConnector:
         devices = self.get_devices_iter(country)
         matching_token = filter(lambda device: device.token == token, devices)
         if match := next(matching_token, None):
-            return match.country, match.user_id, match.device_id, match.model, match.mac
+            return match.country, match.user_id, match.device_id, match.model
 
         return None, None, None, None, None
 
@@ -234,7 +234,8 @@ class XiaomiCloudConnector:
                 user_id = found[0]["uid"]
                 device_id = found[0]["did"]
                 model = found[0]["model"]
-                return c, user_id, device_id, model
+                mac = found[0]["mac"]
+                return c, user_id, device_id, model, mac
         return self.get_device_details_from_home(token, country)
 
     def get_devices(self, country: str) -> Any:
